@@ -41,10 +41,44 @@ const managerQuestions = [
         message: "What is your manager's office number?",
         name: "managerOfficeNumber"
     }
-
 ];
+const engineerQuestions = [
+    {
+        type: "input",
+        message: "What is your engineer's name?",
+        name: "engineerName"
+    },
+    {
+        type: "input",
+        message: "What is your engineer's id?",
+        name: "engineerId"
+
+    },
+    {
+        type: "input",
+        message: "What is your engineer's email?",
+        name: "engineerEmail",
+        validate: checkEmailAddress
+    },
+    {
+        type: "input",
+        message: "What is your manager's GitHub user?",
+        name: "engineerGithub"
+    }
+];
+
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+
+const engineerPrompt = async () => {
+    const answers = await inquirer.prompt([
+        engineerQuestions[0],
+        engineerQuestions[1],
+        engineerQuestions[2],
+        engineerQuestions[3]
+    ]);
+    return answers;
+}
 
 const getUserInput = async () => {
     const teamArr = [];
@@ -56,9 +90,7 @@ const getUserInput = async () => {
             managerQuestions[2],
             managerQuestions[3]
         ]);
-        //console.log(answers);
         teamArr.push(new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber));
-        //console.log(teamArr);
         while (teamFinished === false) {
             let { nextTeamMember } = await inquirer.prompt([
                 {
@@ -67,18 +99,34 @@ const getUserInput = async () => {
                     message: "Which type of team member would you like to add? (use arrow keys to select)",
                     choices: ["Engineer", "Intern", "I don't want to add any additional team members at this time"]
                 }
-            ]).then(() => {
-                switch (nextTeamMember) {
-                    case "Engineer":
-
-                        break;
-
-                    default:
-                        break;
-                }
+            ]);
+            switch (nextTeamMember) {
+                case "Engineer":
+                    let { engineerName, engineerId, engineerEmail, engineerGithub } = await engineerPrompt();
+                    teamArr.push(new Engineer(engineerName, engineerId, engineerEmail, engineerGithub));
+                    console.log(teamArr);
+                    break;
+                case "Intern":
+                    break;
+                default:
+                    teamFinished = true;
+                    break;
             }
-
-            )
+            
+            // .then(() => {
+            //     switch (nextTeamMember) {
+            //         case "Engineer":
+            //             let { engineerName, engineerId, engineerEmail, engineerGithub } = engineerPrompt();
+            //             teamArr.push(new Engineer(engineerName, engineerId, engineerEmail, engineerGithub));
+            //             break;
+            //         case "Intern":
+            //             break;
+            //         default:
+            //             teamFinished = true;
+            //             break;
+            //     }
+            // }
+            // )
         }
     }
     catch (err) {
