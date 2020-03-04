@@ -92,8 +92,15 @@ const internQuestions = [
     }
 ];
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+const managerPrompt = async () => {
+    const answers = await inquirer.prompt([
+        managerQuestions[0],
+        managerQuestions[1],
+        managerQuestions[2],
+        managerQuestions[3]
+    ]);
+    return answers;
+}
 
 const engineerPrompt = async () => {
     const answers = await inquirer.prompt([
@@ -119,13 +126,8 @@ const getUserInput = async () => {
     const teamArr = [];
     let teamFinished = false;
     try {
-        const answers = await inquirer.prompt([
-            managerQuestions[0],
-            managerQuestions[1],
-            managerQuestions[2],
-            managerQuestions[3]
-        ]);
-        teamArr.push(new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber));
+        let { managerName, managerId, managerEmail, managerOfficeNumber } = await managerPrompt();
+        teamArr.push(new Manager(managerName, managerId, managerEmail, managerOfficeNumber));
         while (teamFinished === false) {
             let { nextTeamMember } = await inquirer.prompt([
                 {
@@ -139,32 +141,16 @@ const getUserInput = async () => {
                 case "Engineer":
                     let { engineerName, engineerId, engineerEmail, engineerGithub } = await engineerPrompt();
                     teamArr.push(new Engineer(engineerName, engineerId, engineerEmail, engineerGithub));
-                    console.log(teamArr);
                     break;
                 case "Intern":
                     let { internName, internId, internEmail, internSchool } = await internPrompt();
                     teamArr.push(new Intern(internName, internId, internEmail, internSchool));
-                    console.log(teamArr);
                     break;
                 default:
                     teamFinished = true;
+                    const newTeamPage = render(teamArr);
                     break;
             }
-            
-            // .then(() => {
-            //     switch (nextTeamMember) {
-            //         case "Engineer":
-            //             let { engineerName, engineerId, engineerEmail, engineerGithub } = engineerPrompt();
-            //             teamArr.push(new Engineer(engineerName, engineerId, engineerEmail, engineerGithub));
-            //             break;
-            //         case "Intern":
-            //             break;
-            //         default:
-            //             teamFinished = true;
-            //             break;
-            //     }
-            // }
-            // )
         }
     }
     catch (err) {
@@ -173,8 +159,6 @@ const getUserInput = async () => {
 }
 
 getUserInput();
-
-
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
