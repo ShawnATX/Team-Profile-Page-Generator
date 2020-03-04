@@ -35,20 +35,53 @@ const managerQuestions = [
         message: "What is your manager's email?",
         name: "managerEmail",
         validate: checkEmailAddress
-    }];
+    },
+    {
+        type: "input",
+        message: "What is your manager's office number?",
+        name: "managerOfficeNumber"
+    }
+
+];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 const getUserInput = async () => {
-    try{
+    const teamArr = [];
+    let teamFinished = false;
+    try {
         const answers = await inquirer.prompt([
             managerQuestions[0],
             managerQuestions[1],
             managerQuestions[2],
+            managerQuestions[3]
         ]);
-        console.log(answers);
+        //console.log(answers);
+        teamArr.push(new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber));
+        //console.log(teamArr);
+        while (teamFinished === false) {
+            let { nextTeamMember } = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'nextTeamMember',
+                    message: "Which type of team member would you like to add? (use arrow keys to select)",
+                    choices: ["Engineer", "Intern", "I don't want to add any additional team members at this time"]
+                }
+            ]).then(() => {
+                switch (nextTeamMember) {
+                    case "Engineer":
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            )
+        }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 }
