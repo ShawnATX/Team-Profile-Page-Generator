@@ -62,8 +62,33 @@ const engineerQuestions = [
     },
     {
         type: "input",
-        message: "What is your manager's GitHub user?",
+        message: "What is your engineer's GitHub user?",
         name: "engineerGithub"
+    }
+];
+
+const internQuestions = [
+    {
+        type: "input",
+        message: "What is your intern's name?",
+        name: "internName"
+    },
+    {
+        type: "input",
+        message: "What is your intern's id?",
+        name: "internId"
+
+    },
+    {
+        type: "input",
+        message: "What is your intern's email?",
+        name: "internEmail",
+        validate: checkEmailAddress
+    },
+    {
+        type: "input",
+        message: "From what school does your intern hail?",
+        name: "internSchool"
     }
 ];
 
@@ -76,6 +101,16 @@ const engineerPrompt = async () => {
         engineerQuestions[1],
         engineerQuestions[2],
         engineerQuestions[3]
+    ]);
+    return answers;
+};
+
+const internPrompt = async () => {
+    const answers = await inquirer.prompt([
+        internQuestions[0],
+        internQuestions[1],
+        internQuestions[2],
+        internQuestions[3]
     ]);
     return answers;
 }
@@ -97,7 +132,7 @@ const getUserInput = async () => {
                     type: 'list',
                     name: 'nextTeamMember',
                     message: "Which type of team member would you like to add? (use arrow keys to select)",
-                    choices: ["Engineer", "Intern", "I don't want to add any additional team members at this time"]
+                    choices: ["Engineer", "Intern", "My shoestring budget does not allow me to add any additional team members. Why do you think we have interns in the first place?"]
                 }
             ]);
             switch (nextTeamMember) {
@@ -107,6 +142,9 @@ const getUserInput = async () => {
                     console.log(teamArr);
                     break;
                 case "Intern":
+                    let { internName, internId, internEmail, internSchool } = await internPrompt();
+                    teamArr.push(new Intern(internName, internId, internEmail, internSchool));
+                    console.log(teamArr);
                     break;
                 default:
                     teamFinished = true;
