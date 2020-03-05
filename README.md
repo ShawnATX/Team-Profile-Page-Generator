@@ -3,7 +3,7 @@
 
 ## Description
 
-![Repo commit](https://img.shields.io/github/last-commit/ShawnATX/Team Profile Generator - Node CLI)
+![Repo commit](https://img.shields.io/github/last-commit/ShawnATX/Team-Profile-Page-Generator)
 
 This is a Node CLI tool that will help build development team pages to help keep personelle information organized. The application has dependencies Inquirer, jest, and chalk.
 
