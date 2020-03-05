@@ -7,6 +7,10 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
+const chalk = require('chalk');
+
+const emphasis = chalk.red.bold;
+
 
 
 const checkEmailAddress = (email) => {
@@ -14,22 +18,27 @@ const checkEmailAddress = (email) => {
         return true;
     }
     else {
-        return "Please enter a valid email address"
+        return "Please enter a valid email address";
+    }
+};
+
+const checkId = (content) => {
+    if (content) {
+        return true;
+    }
+    else {
+        return "Please enter an employee ID number."
     }
 };
 
 const writeTeamPage = (content) => {
-<<<<<<< HEAD
-    if(!fs.existsSync(outputPath)) {
-        fs.mkdirSync(outputPath);
+    if(!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR);
     }
-=======
->>>>>>> 549c03c019ac7b2de0e1bb0fc3004f13f026b25c
     fs.writeFile(outputPath, content, function(err) {
         if (err) {
           return console.log(err);
         }
-        console.log("Success!");
       });
 }
 
@@ -37,73 +46,72 @@ const writeTeamPage = (content) => {
 const managerQuestions = [
     {
         type: "input",
-        message: "What is your manager's name?",
+        message: "What is your manager's " + emphasis('name') + '?',
         name: "managerName"
     },
     {
         type: "input",
-        message: "What is your manager's id?",
-        name: "managerId"
-
+        message: "What is your manager's " + emphasis('id') + "?",
+        name: "managerId",
+        validate: checkId
     },
     {
         type: "input",
-        message: "What is your manager's email?",
+        message: "What is your manager's " + emphasis('email') + "?",
         name: "managerEmail",
         validate: checkEmailAddress
     },
     {
         type: "input",
-        message: "What is your manager's office number?",
+        message: "What is your manager's " + emphasis('office number') + "?",
         name: "managerOfficeNumber"
     }
 ];
 const engineerQuestions = [
     {
         type: "input",
-        message: "What is your engineer's name?",
+        message: "What is your engineer's " + emphasis('name') + "?",
         name: "engineerName"
     },
     {
         type: "input",
-        message: "What is your engineer's id?",
-        name: "engineerId"
-
+        message: "What is your engineer's " + emphasis('id') + "?",
+        name: "engineerId",
+        validate: checkId
     },
     {
         type: "input",
-        message: "What is your engineer's email?",
+        message: "What is your engineer's " + emphasis('email') + "?",
         name: "engineerEmail",
         validate: checkEmailAddress
     },
     {
         type: "input",
-        message: "What is your engineer's GitHub user?",
+        message: "What is your engineer's " + emphasis('GitHub user') + "?",
         name: "engineerGithub"
     }
 ];
-
 const internQuestions = [
     {
         type: "input",
-        message: "What is your intern's name?",
+        message: "What is your intern's " + emphasis('name') + "?",
         name: "internName"
     },
     {
         type: "input",
-        message: "What is your intern's id?",
-        name: "internId"
-
+        message: "What is your intern's " + emphasis('id') + "?",
+        name: "internId",
+        validate: checkId
     },
     {
         type: "input",
-        message: "What is your intern's email?",
+        message: "What is your intern's " + emphasis('email') + "?",
         name: "internEmail",
         validate: checkEmailAddress
     },
     {
         type: "input",
-        message: "From what school does your intern hail?",
+        message: "From what " + emphasis('school') + " does your intern hail?",
         name: "internSchool"
     }
 ];
@@ -150,7 +158,7 @@ const getUserInput = async () => {
                     type: 'list',
                     name: 'nextTeamMember',
                     message: "Which type of team member would you like to add? (use arrow keys to select)",
-                    choices: ["Engineer", "Intern", "My shoestring budget does not allow me to add any additional team members. Why do you think we have interns in the first place?"]
+                    choices: ["Engineer", "Intern", chalk.italic('My budget does not allow me to add any additional team members. Why do you think we have interns in the first place?')]
                 }
             ]);
             switch (nextTeamMember) {
@@ -166,7 +174,7 @@ const getUserInput = async () => {
                     teamFinished = true;
                     const newTeamPage = render(teamArr);
                     writeTeamPage(newTeamPage);
-                    console.log("Team page created!");
+                    console.log('Team page created in the output folder! Have a great day!');
                     break;
             }
         }
