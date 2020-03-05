@@ -19,9 +19,12 @@ const checkEmailAddress = (email) => {
 };
 
 const writeTeamPage = (content) => {
+<<<<<<< HEAD
     if(!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath);
     }
+=======
+>>>>>>> 549c03c019ac7b2de0e1bb0fc3004f13f026b25c
     fs.writeFile(outputPath, content, function(err) {
         if (err) {
           return console.log(err);
